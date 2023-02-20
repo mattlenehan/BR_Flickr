@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/fragment_photo_list">
+
+    <fragment
+        android:id="@+id/fragment_photo_list"
+        android:name="com.example.br_flickr.ui.main.photos.PhotoListFragment"
+        android:label="Photos"
+        tools:layout="@layout/fragment_photo_list">
+        <action
+            android:id="@+id/open_photo_details"
+            app:destination="@id/fragment_photo_details"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/fragment_photo_list"
+            app:popUpToInclusive="false">
+            <argument
+                android:name="photo_url"
+                app:argType="string"
+                app:nullable="false" />
+            <argument
+                android:name="title"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_photo_details"
+        android:name="com.example.br_flickr.ui.main.details.PhotoDetailsFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_photo_details">
+        <argument
+            android:name="photo_url"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+</navigation>
