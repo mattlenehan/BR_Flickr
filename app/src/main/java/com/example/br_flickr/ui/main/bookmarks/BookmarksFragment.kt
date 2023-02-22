@@ -1,4 +1,4 @@
-package com.example.br_flickr.ui.main.photos
+package com.example.br_flickr.ui.main.bookmarks
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,43 +8,28 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.br_flickr.databinding.EmptyViewItemBinding
+import com.example.br_flickr.databinding.FragmentBookmarksBinding
 import com.example.br_flickr.databinding.FragmentPhotoListBinding
 import com.example.br_flickr.databinding.PhotoViewItemBinding
-import com.example.br_flickr.ui.main.util.PaginationScrollListener
-import com.example.br_flickr.ui.main.util.showSnackbar
-import com.example.networking.util.ApiResult
+import com.example.br_flickr.ui.main.photos.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PhotoListFragment : Fragment() {
+class BookmarksFragment : Fragment() {
 
-    private val args: PhotoListFragmentArgs by navArgs()
-
-    private val viewModel: PhotoListViewModel by viewModels()
+    private val viewModel: BookmarksViewModel by viewModels()
 
     private val photosAdapter by lazy {
         ListAdapter(listener = adapterListener)
     }
 
-    private var _binding: FragmentPhotoListBinding? = null
+    private var _binding: FragmentBookmarksBinding? = null
     private val binding get() = _binding!!
-
-    private var currentPage = 0
-
-    private val paginationScrollListener = object : PaginationScrollListener() {
-        override var isCurrentlyLoading: Boolean = false
-
-        override fun loadMoreItems() {
-            if (photosAdapter.itemCount > 1) {
-                isCurrentlyLoading = true
-                currentPage++
-                viewModel.fetchPhotos(args.query, currentPage)
-            }
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +42,7 @@ class PhotoListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPhotoListBinding.inflate(inflater, container, false)
+        _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -67,14 +52,12 @@ class PhotoListFragment : Fragment() {
     }
 
     private fun init() {
-        viewModel.fetchPhotos(args.query, 0)
+        viewModel.fetchLocalPhotos()
         binding.recycler.apply {
             adapter = photosAdapter
             layoutManager = GridLayoutManager(binding.root.context, 2).apply {
                 spanSizeLookup = photosAdapter.spanSizeLookup
             }
-            paginationScrollListener.layoutManager = layoutManager as GridLayoutManager
-            addOnScrollListener(paginationScrollListener)
         }
     }
 
@@ -82,27 +65,9 @@ class PhotoListFragment : Fragment() {
         viewModel.photos.observe(
             viewLifecycleOwner
         ) {
-            val result = it.getContentIfNotHandled()
-            when (result?.status) {
-                ApiResult.Status.SUCCESS -> {
-                    paginationScrollListener.isCurrentlyLoading = false
-                    binding.recycler.visibility = View.VISIBLE
-                    binding.loading.visibility = View.GONE
-                    photosAdapter.accept(result.data ?: emptyList())
-                }
-                ApiResult.Status.ERROR -> {
-                    paginationScrollListener.isCurrentlyLoading = false
-                    binding.recycler.visibility = View.VISIBLE
-                    binding.loading.visibility = View.GONE
-                    view?.showSnackbar(result.message)
-                }
-                ApiResult.Status.LOADING -> {
-                    paginationScrollListener.isCurrentlyLoading = true
-                    binding.recycler.visibility = View.GONE
-                    binding.loading.visibility = View.VISIBLE
-                }
-                null -> {}
-            }
+            binding.recycler.visibility = View.VISIBLE
+            binding.loading.visibility = View.GONE
+            photosAdapter.accept(it ?: emptyList())
         }
     }
 

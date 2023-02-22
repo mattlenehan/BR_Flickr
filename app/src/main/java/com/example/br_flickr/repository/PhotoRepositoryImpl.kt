@@ -22,9 +22,9 @@ class PhotoRepositoryImpl(
     retrofit: Retrofit,
 ) : BaseRepository(retrofit), PhotoRepository {
 
-    private val _photosFlow: MutableStateFlow<ApiResult<PhotosResponse>?> =
+    private val _photosFlow: MutableStateFlow<ApiResult<Map<String, PhotosResponse>>?> =
         MutableStateFlow(null)
-    override val photosFlow: StateFlow<ApiResult<PhotosResponse>?> = _photosFlow
+    override val photosFlow: StateFlow<ApiResult<Map<String, PhotosResponse>>?> = _photosFlow
 
     private val _searchQueries: LiveData<List<String>> =
         Transformations.map(database.searchesDao.getSearchQueries()) {
@@ -44,13 +44,30 @@ class PhotoRepositoryImpl(
                 },
                 defaultErrorMessage = "Error fetching photos"
             )
+            if (photosFlow.value?.data?.containsKey(query) == true) {
+                val map = photosFlow.value?.data?.toMutableMap() ?: mutableMapOf()
+                result.data?.let {
+                    map.put(query, it)
+                }
+                _photosFlow.value = ApiResult(
+                    result.status,
+                    map,
+                    result.error,
+                    result.message ?: result.error?.statusMessage ?: "Unable to fetch photos"
+                )
+            } else {
+                val map = photosFlow.value?.data?.toMutableMap() ?: mutableMapOf()
+                result.data?.let {
+                    map.put(query, it)
+                }
+                _photosFlow.value = ApiResult(
+                    result.status,
+                    map,
+                    result.error,
+                    result.message ?: result.error?.statusMessage ?: "Unable to fetch photos"
+                )
+            }
 
-            _photosFlow.value = ApiResult(
-                result.status,
-                result.data,
-                result.error,
-                result.message ?: result.error?.statusMessage ?: "Unable to fetch photos"
-            )
             emit(result)
         }.flowOn(Dispatchers.IO)
     }

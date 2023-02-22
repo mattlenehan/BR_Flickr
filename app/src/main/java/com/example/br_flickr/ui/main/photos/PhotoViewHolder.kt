@@ -5,7 +5,6 @@ import androidx.viewbinding.ViewBinding
 import coil.load
 import com.example.br_flickr.databinding.EmptyViewItemBinding
 import com.example.br_flickr.databinding.PhotoViewItemBinding
-import com.example.br_flickr.databinding.SearchHistoryViewItemBinding
 
 internal sealed class PhotoViewHolder(bindings: ViewBinding) :
     RecyclerView.ViewHolder(bindings.root) {
@@ -28,16 +27,16 @@ internal sealed class PhotoViewHolder(bindings: ViewBinding) :
         }
     }
 
-    class SearchHistoryViewHolder(
-        private val bindings: SearchHistoryViewItemBinding,
+    class SavedPhotoListViewHolder(
+        private val bindings: PhotoViewItemBinding,
     ) : PhotoViewHolder(bindings) {
         fun bind(
-            item: PhotoViewItem.SearchHistoryItem,
-            onSearchItemSelected: (String) -> Unit
+            item: PhotoViewItem.SavedPhotoListItem,
+            onClick: (String, String) -> Unit
         ) {
-            bindings.searchHistoryText.text = item.query
+            bindings.photo.load(item.bitmap)
             bindings.root.setOnClickListener {
-                onSearchItemSelected(item.query)
+                onClick(item.bitmap.toString(), "saved")
             }
         }
     }

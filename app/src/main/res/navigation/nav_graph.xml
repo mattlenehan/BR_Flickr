@@ -3,13 +3,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/fragment_photo_list">
+    app:startDestination="@+id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.example.br_flickr.ui.main.home.HomeFragment"
+        android:label="BR_Flickr"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/open_photo_list"
+            app:destination="@id/fragment_photo_list"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/fragment_home"
+            app:popUpToInclusive="false">
+            <argument
+                android:name="query"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+
+        <action
+            android:id="@+id/open_bookmarks"
+            app:destination="@id/fragment_bookmarks"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/fragment_home"
+            app:popUpToInclusive="false"/>
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_photo_list"
         android:name="com.example.br_flickr.ui.main.photos.PhotoListFragment"
-        android:label="Photos"
+        android:label="{query}"
         tools:layout="@layout/fragment_photo_list">
+        <argument
+            android:name="query"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@+id/open_photo_details"
+            app:destination="@id/fragment_photo_details"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/fragment_photo_list"
+            app:popUpToInclusive="false">
+            <argument
+                android:name="photo_url"
+                app:argType="string"
+                app:nullable="false" />
+            <argument
+                android:name="title"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_bookmarks"
+        android:name="com.example.br_flickr.ui.main.bookmarks.BookmarksFragment"
+        android:label="Bookmarks"
+        tools:layout="@layout/fragment_bookmarks">
         <action
             android:id="@+id/open_photo_details"
             app:destination="@id/fragment_photo_details"

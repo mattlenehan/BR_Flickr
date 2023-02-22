@@ -3,4 +3,6 @@
     <string name="search_photos">Search Photos</string>
     <string name="no_photos_found">No photos found 🤷</string>
     <string name="think_of_a_photo_and_search">Think of a photo and search! 🔎</string>
+    <string name="view_saved_photos">View Saved Photos</string>
+    <string name="saved_check">Saved ✔️</string>
 </resources>

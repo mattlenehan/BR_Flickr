@@ -1,12 +1,17 @@
 package com.example.br_flickr.ui.main.details
 
+import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.example.br_flickr.R
 import com.example.br_flickr.databinding.FragmentPhotoDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,5 +44,9 @@ class PhotoDetailsFragment : Fragment() {
 
     private fun init() {
         binding.imageDetail.load(args.photoUrl)
+        binding.saveButton.setOnClickListener {
+            binding.saveButton.text = getString(R.string.saved_check)
+            binding.saveButton.isEnabled = false
+        }
     }
 }

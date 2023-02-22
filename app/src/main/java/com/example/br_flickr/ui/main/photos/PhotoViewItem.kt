@@ -1,8 +1,9 @@
 package com.example.br_flickr.ui.main.photos
 
-import com.example.models.Photo
+import android.graphics.Bitmap
 import com.example.br_flickr.R
 import com.example.br_flickr.ui.main.util.ViewItem
+import com.example.models.Photo
 
 sealed class PhotoViewItem(
     open val id: String,
@@ -24,12 +25,12 @@ sealed class PhotoViewItem(
         type = PhotoViewItemType.PHOTO_LIST_ITEM,
     )
 
-    data class SearchHistoryItem(
+    data class SavedPhotoListItem(
         override val id: String,
-        val query: String
+        val bitmap: Bitmap
     ) : PhotoViewItem(
         id = id,
-        type = PhotoViewItemType.SEARCH_HISTORY_ITEM
+        type = PhotoViewItemType.SAVED_PHOTO_LIST_ITEM,
     )
 
     data class EmptyState(
@@ -44,10 +45,14 @@ enum class PhotoViewItemType(
     val layoutId: Int,
 ) {
     PHOTO_LIST_ITEM(R.layout.photo_view_item),
-    SEARCH_HISTORY_ITEM(R.layout.search_history_view_item),
+    SAVED_PHOTO_LIST_ITEM(R.layout.photo_view_item),
     EMPTY(R.layout.empty_view_item)
 }
 
-fun String.toSearchViewItem(): PhotoViewItem.SearchHistoryItem {
-    return PhotoViewItem.SearchHistoryItem(id = this.hashCode().toString(), query = this)
+//fun String.toPhotoViewItem(): PhotoViewItem.SavedPhotoListItem {
+//    return PhotoViewItem.SavedPhotoListItem(id = this.hashCode().toString(), bitmap = this)
+//}
+
+fun Bitmap.toPhotoViewItem(): PhotoViewItem.SavedPhotoListItem {
+    return PhotoViewItem.SavedPhotoListItem(id = this.hashCode().toString(), bitmap = this)
 }

@@ -24,13 +24,13 @@ class MainActivity : AppCompatActivity() {
     // menu should be considered as top level destinations.
     private val appBarConfiguration = AppBarConfiguration(
         setOf(
-            R.id.fragment_photo_list
+            R.id.fragment_home
         )
     )
 
     // toolbar is GONE for these fragments
     private val toolbarConfiguration = setOf(
-        R.id.fragment_photo_list,
+        R.id.fragment_home,
     )
 
     private val navigationDestinationListener =

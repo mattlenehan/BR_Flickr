@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface PhotoRepository {
 
-    val photosFlow: StateFlow<ApiResult<PhotosResponse>?>
+    val photosFlow: StateFlow<ApiResult<Map<String, PhotosResponse>>?>
     val searchQueries: LiveData<List<String>>
 
     suspend fun getPhotos(query: String, page: Int): Flow<ApiResult<PhotosResponse>?>
