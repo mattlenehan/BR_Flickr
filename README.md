@@ -2,7 +2,7 @@
 
 MVVM * Coroutines * Modularization * Retrofit * OkHttp * Moshi * ViewBinding * Hilt
 
-LiveData * StateFlow * Coil * Navigation * Lottie * Material3 * Dark Mode * Gson
+LiveData * StateFlow * Coil * Navigation * Lottie * Material3 * Dark Mode * Gson * Room
 
 
 https://user-images.githubusercontent.com/6844125/220034363-feed879e-03ff-4217-b256-a35fc312c9fa.mp4
