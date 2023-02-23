@@ -73,7 +73,7 @@ class BookmarksFragment : Fragment() {
 
     private val adapterListener = object : AdapterListener {
         override fun onPhotoClick(url: String, title: String) {
-            val direction = PhotoListFragmentDirections.openPhotoDetails(url, title)
+            val direction = BookmarksFragmentDirections.openPhotoDetails(url, title)
             findNavController().navigate(direction)
         }
     }
@@ -147,8 +147,7 @@ private class ListAdapter(private val listener: AdapterListener) :
             )
             is PhotoViewHolder.EmptyViewHolder -> {}
             is PhotoViewHolder.SavedPhotoListViewHolder -> holder.bind(
-                item as PhotoViewItem.SavedPhotoListItem,
-                onClick = { url, title -> listener.onPhotoClick(url, title) }
+                item as PhotoViewItem.SavedPhotoListItem
             )
         }
     }

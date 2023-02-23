@@ -182,8 +182,7 @@ private class ListAdapter(private val listener: AdapterListener) :
             )
             is PhotoViewHolder.EmptyViewHolder -> {}
             is PhotoViewHolder.SavedPhotoListViewHolder -> holder.bind(
-                item as PhotoViewItem.SavedPhotoListItem,
-                onClick = { url, title -> listener.onPhotoClick(url, title) }
+                item as PhotoViewItem.SavedPhotoListItem
             )
         }
     }

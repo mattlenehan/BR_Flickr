@@ -31,13 +31,9 @@ internal sealed class PhotoViewHolder(bindings: ViewBinding) :
         private val bindings: PhotoViewItemBinding,
     ) : PhotoViewHolder(bindings) {
         fun bind(
-            item: PhotoViewItem.SavedPhotoListItem,
-            onClick: (String, String) -> Unit
+            item: PhotoViewItem.SavedPhotoListItem
         ) {
             bindings.photo.load(item.bitmap)
-            bindings.root.setOnClickListener {
-                onClick(item.bitmap.toString(), "saved")
-            }
         }
     }
 
