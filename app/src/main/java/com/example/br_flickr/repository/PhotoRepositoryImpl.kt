@@ -10,8 +10,10 @@ import com.example.br_flickr.ui.main.photos.PhotoViewItem
 import com.example.models.PhotosResponse
 import com.example.networking.util.ApiResult
 import com.example.networking.webservices.PhotosWebservice
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -20,17 +22,28 @@ class PhotoRepositoryImpl(
     private val photosWebservice: PhotosWebservice,
     private val database: SearchHistoryDatabase,
     retrofit: Retrofit,
-) : BaseRepository(retrofit), PhotoRepository {
+    private val coroutineScope: CoroutineScope,
+    ) : BaseRepository(retrofit), PhotoRepository {
 
     private val _photosFlow: MutableStateFlow<ApiResult<Map<String, PhotosResponse>>?> =
         MutableStateFlow(null)
     override val photosFlow: StateFlow<ApiResult<Map<String, PhotosResponse>>?> = _photosFlow
 
-    private val _searchQueries: LiveData<List<String>> =
-        Transformations.map(database.searchesDao.getSearchQueries()) {
-            it.asDomainModel()
+    private val _searchQueries = MutableStateFlow<List<String>>(emptyList())
+    override val searchQueries: StateFlow<List<String>> = _searchQueries
+
+    init {
+        loadSearchQueries()
+    }
+    private fun loadSearchQueries() {
+        coroutineScope.launch {
+            database.searchesDao.getSearchQueries().collect {
+                _searchQueries.value = it.map { item ->
+                    item.query
+                }
+            }
         }
-    override val searchQueries: LiveData<List<String>> = _searchQueries
+    }
 
     override suspend fun getPhotos(query: String, page: Int): Flow<ApiResult<PhotosResponse>> {
         return flow {

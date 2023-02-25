@@ -1,15 +1,14 @@
 package com.example.br_flickr.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.OnConflictStrategy
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SearchHistoryDao {
 
     // search history list
     @Query("select * from DatabaseSearchHistoryItem")
-    fun getSearchQueries(): LiveData<List<DatabaseSearchHistoryItem>>
+    fun getSearchQueries(): Flow<List<DatabaseSearchHistoryItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSearchQuery(databaseSearchHistoryItem: DatabaseSearchHistoryItem)

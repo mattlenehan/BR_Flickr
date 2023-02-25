@@ -27,7 +27,7 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             combine(
-                photoRepository.searchQueries.asFlow(),
+                photoRepository.searchQueries,
                 searchTextFlow
             ) { searchHistory, query ->
                 Pair(searchHistory, query)

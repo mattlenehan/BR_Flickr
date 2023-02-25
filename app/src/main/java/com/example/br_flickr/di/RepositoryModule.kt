@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -21,11 +22,13 @@ object RepositoryModule {
         photosWebservice: PhotosWebservice,
         database: SearchHistoryDatabase,
         retrofit: Retrofit,
+        coroutineScope: CoroutineScope
     ): PhotoRepository {
         return PhotoRepositoryImpl(
             photosWebservice = photosWebservice,
             database = database,
             retrofit = retrofit,
+            coroutineScope = coroutineScope
         )
     }
 }
